@@ -32,14 +32,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController _basicSalaryController;
   late TextEditingController _lunchController;
+  late TextEditingController _overtimeController;
+  late TextEditingController _trustBonusController;
 
   @override
   void initState() {
     super.initState();
     _basicSalaryController = TextEditingController();
     _lunchController = TextEditingController();
-    // _overtimeController = TextEditingController();
-    // _trustBonusController = TextEditingController();
+    _overtimeController = TextEditingController();
+    _trustBonusController = TextEditingController();
     // _newEmployerController = TextEditingController();
     // _healthInsuranceController = TextEditingController();
     // _laborInsuranceController = TextEditingController();
@@ -63,10 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
               labelText: '本薪',
               controller: _basicSalaryController,
               keyboardType: TextInputType.number),
-              CustomInputField(
+          CustomInputField(
               labelText: '午餐費',
               controller: _lunchController,
               keyboardType: TextInputType.number),
+          CustomInputField(
+              labelText: '加班費',
+              controller: _overtimeController,
+              keyboardType: TextInputType.number),
+          CustomInputFieldHint(
+              labelText: '持股信託',
+              controller: _trustBonusController,
+              keyboardType: TextInputType.number)
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -84,6 +94,40 @@ class CustomInputField extends StatelessWidget {
   final TextInputType keyboardType;
 
   const CustomInputField({
+    required this.labelText,
+    required this.controller,
+    required this.keyboardType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(labelText),
+        SizedBox(height: 10),
+        Container(
+          width: 150,
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              // labelText: labelText,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomInputFieldHint extends StatelessWidget {
+  final String labelText;
+  final TextEditingController controller;
+  final TextInputType keyboardType;
+
+  const CustomInputFieldHint({
     required this.labelText,
     required this.controller,
     required this.keyboardType,
