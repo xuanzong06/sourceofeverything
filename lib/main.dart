@@ -35,6 +35,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController _overtimeController;
   late TextEditingController _trustBonusController;
 
+  late TextEditingController _dateController;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _lunchController = TextEditingController();
     _overtimeController = TextEditingController();
     _trustBonusController = TextEditingController();
+    _dateController = TextEditingController();
     // _newEmployerController = TextEditingController();
     // _healthInsuranceController = TextEditingController();
     // _laborInsuranceController = TextEditingController();
@@ -53,30 +56,107 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> _selectDate() async {
+      DateTime? _picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+      );
+
+      if (_picked != null) {
+        setState(() {
+          _dateController.text = _picked.toString().split(" ")[0];
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomInputField(
-              labelText: '本薪',
-              controller: _basicSalaryController,
-              keyboardType: TextInputType.number),
-          CustomInputField(
-              labelText: '午餐費',
-              controller: _lunchController,
-              keyboardType: TextInputType.number),
-          CustomInputField(
-              labelText: '加班費',
-              controller: _overtimeController,
-              keyboardType: TextInputType.number),
-          CustomInputFieldHint(
-              labelText: '持股信託',
-              controller: _trustBonusController,
-              keyboardType: TextInputType.number)
+          Container(
+            child: TextField(
+              controller: _dateController,
+              decoration: InputDecoration(
+                labelText: 'Date',
+                filled: true,
+                prefixIcon: Icon(Icons.calendar_today),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+              ),
+              readOnly: true,
+              onTap: () {
+                _selectDate();
+              },
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomInputField(
+                        labelText: '本薪',
+                        controller: _basicSalaryController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '午餐費',
+                        controller: _lunchController,
+                        keyboardType: TextInputType.number),
+                    CustomInputField(
+                        labelText: '加班費',
+                        controller: _overtimeController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '持股信託',
+                        controller: _trustBonusController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '新制雇主提繳',
+                        controller: _trustBonusController,
+                        keyboardType: TextInputType.number),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomInputField(
+                        labelText: '本薪',
+                        controller: _basicSalaryController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '午餐費',
+                        controller: _lunchController,
+                        keyboardType: TextInputType.number),
+                    CustomInputField(
+                        labelText: '加班費',
+                        controller: _overtimeController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '持股信託',
+                        controller: _trustBonusController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '新制雇主提繳',
+                        controller: _trustBonusController,
+                        keyboardType: TextInputType.number),
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -101,13 +181,13 @@ class CustomInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(labelText),
-        SizedBox(height: 10),
         Container(
-          width: 150,
+          width: 85,
+          height: 50,
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
@@ -135,23 +215,39 @@ class CustomInputFieldHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    String fixText = "";
+    if (labelText == "持股信託") {
+      fixText = "1500";
+    }
+    if (labelText == "午餐費") {
+      fixText = "2400";
+    }
+
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text(labelText),
-        SizedBox(height: 10),
         Container(
-          width: 150,
+          width: 85,
+          height: 50,
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
+              labelText: fixText,
               // labelText: labelText,
             ),
           ),
         ),
       ],
     );
+  }
+}
+
+class BasicInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
