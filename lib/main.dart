@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,48 +12,143 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/home',
+      routes: {
+        '/home':(context) => PagesButton(),
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'SourceOfEverything :P'),
+      // 由於建立了 initalRoute 就不用設定 home 屬性
+      // home: const InputSalary(title: 'SourceOfEverything :P'),
+      // home: const PagesButton(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+// 共通
+Widget LinkContainer(PageName, PageURL) {
+  // Color randomColor = getRandomColor();
+  return GestureDetector(
+    child: Container(
+      color: getRandomColor(),
+      width: 200,
+      height: 100,
+      child: Center(
+        child: Text(PageName),
+      ),
+    ),
+    onTap: () {
+      //如果要使用我這種方式去建立Widget，會需要先建立Route
+      // MaterialPageRoute(builder: (context) => const PageURL()),
+    },
+  );
+}
+
+Color getRandomColor() {
+  // 生成隨機的 RGB 顏色
+  Random random = Random();
+  int red = random.nextInt(256);
+  int green = random.nextInt(256);
+  int blue = random.nextInt(256);
+
+  return Color.fromRGBO(red, green, blue, 1.0);
+}
+
+class PagesButton extends StatelessWidget {
+  const PagesButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('各式各樣畫面的入口'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [],
+        ),
+      ),
+    );
+  }
+}
+
+// KnowDeviceInfoｚ
+class KnowDeviceInfo extends StatefulWidget {
+  const KnowDeviceInfo({super.key});
+
+  @override
+  State<KnowDeviceInfo> createState() => _KnowDeviceInfoState();
+}
+
+class _KnowDeviceInfoState extends State<KnowDeviceInfo> {
+  @override
+  Widget build(BuildContext context) {
+    final double DeviceScreenWidth = MediaQuery.of(context).size.width;
+    final double DeviceSrceenHeight = MediaQuery.of(context).size.height;
+    return Center(
+      child: Container(
+        color: Colors.greenAccent,
+        // height: 300,
+        // width: 300,
+        child: Column(
+          children: [
+            Text(
+              '這個裝置的Width:$DeviceScreenWidth',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '這個裝置的Width:$DeviceSrceenHeight',
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InputSalary extends StatefulWidget {
+  const InputSalary({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<InputSalary> createState() => _InputSalaryState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController _basicSalaryController;
-  late TextEditingController _lunchController;
-  late TextEditingController _overtimeController;
-  late TextEditingController _trustBonusController;
-
-  late TextEditingController _dateController;
+class _InputSalaryState extends State<InputSalary> {
+  late TextEditingController _basicSalaryController; //基本薪資
+  late TextEditingController _lunchController; //午餐費
+  late TextEditingController _overtimeController; //加班費
+  late TextEditingController _trustBonusController; //信託
+  late TextEditingController _dateController; //日期
+  late TextEditingController _newEmployerController; //新制
+  late TextEditingController _healthInsuranceController;
+  late TextEditingController _laborInsuranceController;
+  late TextEditingController _employeeBenefitsController;
+  late TextEditingController _industryUnionFeeController;
+  late TextEditingController _supplementaryInsuranceController;
+  late TextEditingController _employeeStockSelfController;
 
   @override
   void initState() {
     super.initState();
+
+    _dateController = TextEditingController();
     _basicSalaryController = TextEditingController();
     _lunchController = TextEditingController();
     _overtimeController = TextEditingController();
     _trustBonusController = TextEditingController();
-    _dateController = TextEditingController();
-    // _newEmployerController = TextEditingController();
-    // _healthInsuranceController = TextEditingController();
-    // _laborInsuranceController = TextEditingController();
-    // _employeeBenefitsController = TextEditingController();
-    // _industryUnionFeeController = TextEditingController();
-    // _supplementaryInsuranceController = TextEditingController();
-    // _employeeStockSelfController = TextEditingController();
+    _newEmployerController = TextEditingController();
+    _healthInsuranceController = TextEditingController();
+    _laborInsuranceController = TextEditingController();
+    _employeeBenefitsController = TextEditingController();
+    _industryUnionFeeController = TextEditingController();
+    _supplementaryInsuranceController = TextEditingController();
+    _employeeStockSelfController = TextEditingController();
   }
 
   @override
@@ -105,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text('應發金額'),
                     CustomInputField(
                         labelText: '本薪',
                         controller: _basicSalaryController,
@@ -123,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         keyboardType: TextInputType.number),
                     CustomInputFieldHint(
                         labelText: '新制雇主提繳',
-                        controller: _trustBonusController,
+                        controller: _newEmployerController,
                         keyboardType: TextInputType.number),
                   ],
                 ),
@@ -132,25 +230,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text('應扣金額'),
                     CustomInputField(
-                        labelText: '本薪',
-                        controller: _basicSalaryController,
+                        labelText: '健保費本人自付',
+                        controller: _healthInsuranceController,
                         keyboardType: TextInputType.number),
                     CustomInputFieldHint(
-                        labelText: '午餐費',
-                        controller: _lunchController,
-                        keyboardType: TextInputType.number),
-                    CustomInputField(
-                        labelText: '加班費',
-                        controller: _overtimeController,
+                        labelText: '勞保費自付',
+                        controller: _laborInsuranceController,
                         keyboardType: TextInputType.number),
                     CustomInputFieldHint(
-                        labelText: '持股信託',
-                        controller: _trustBonusController,
+                        labelText: '職工福利費',
+                        controller: _employeeBenefitsController,
                         keyboardType: TextInputType.number),
                     CustomInputFieldHint(
-                        labelText: '新制雇主提繳',
-                        controller: _trustBonusController,
+                        labelText: '產業工會會費',
+                        controller: _industryUnionFeeController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '補充健保費',
+                        controller: _supplementaryInsuranceController,
+                        keyboardType: TextInputType.number),
+                    CustomInputFieldHint(
+                        labelText: '員工持股信託自提金',
+                        controller: _employeeStockSelfController,
                         keyboardType: TextInputType.number),
                   ],
                 ),
@@ -222,6 +325,21 @@ class CustomInputFieldHint extends StatelessWidget {
     if (labelText == "午餐費") {
       fixText = "2400";
     }
+    if (labelText == "員工持股信託自提金") {
+      fixText = "2000";
+    }
+    if (labelText == "職工福利費") {
+      fixText = "235";
+    }
+    if (labelText == "產業工會會費") {
+      fixText = "250";
+    }
+    if (labelText == "補充健保費") {
+      fixText = "32";
+    }
+    if (labelText == "勞保費自付") {
+      fixText = "1100";
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -250,4 +368,23 @@ class BasicInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Placeholder();
   }
+}
+
+void SomeUseful() {
+  var map = Map<String, dynamic>();
+  String paramStr = 'hello world';
+  map['param_name'] = 'source';
+  map['param1'] = paramStr;
+}
+
+//呼叫後台PHP
+void BackToChaos() async {
+  try {
+    // final respones =  await http.post(Uri.parse(_globalvar.Global_URL), body: map);
+    // if (200 == respones.statusCode) {
+    //   print('success');
+    // } else {
+    //   print("error");
+    // }
+  } catch (e) {}
 }
