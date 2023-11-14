@@ -14,7 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home':(context) => PagesButton(),
+        '/home': (context) => PagesButton(),
+        '/KnowDeviceInfo': (context) => KnowDeviceInfo(),
+        '/InputSalary': (context) => InputSalary(title: 'SourceOfEverything :P'),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
 }
 
 // 共通
-Widget LinkContainer(PageName, PageURL) {
+Widget LinkContainer(BuildContext context, String pagename) {
   // Color randomColor = getRandomColor();
   return GestureDetector(
     child: Container(
@@ -37,12 +39,13 @@ Widget LinkContainer(PageName, PageURL) {
       width: 200,
       height: 100,
       child: Center(
-        child: Text(PageName),
+        child: Text(pagename),
       ),
     ),
     onTap: () {
       //如果要使用我這種方式去建立Widget，會需要先建立Route
       // MaterialPageRoute(builder: (context) => const PageURL()),
+      Navigator.pushNamed(context, '/' + pagename);
     },
   );
 }
@@ -68,14 +71,17 @@ class PagesButton extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [],
+          children: [
+            LinkContainer(context, 'KnowDeviceInfo'),
+            LinkContainer(context, 'InputSalary'),
+          ],
         ),
       ),
     );
   }
 }
 
-// KnowDeviceInfoｚ
+// KnowDeviceInfo
 class KnowDeviceInfo extends StatefulWidget {
   const KnowDeviceInfo({super.key});
 
@@ -102,6 +108,13 @@ class _KnowDeviceInfoState extends State<KnowDeviceInfo> {
             Text(
               '這個裝置的Width:$DeviceSrceenHeight',
               style: TextStyle(color: Colors.black),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              tooltip: '回上頁',
+              child: const Icon(Icons.arrow_back),
             ),
           ],
         ),
