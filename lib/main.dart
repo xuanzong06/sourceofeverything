@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => PagesButton(),
         '/KnowDeviceInfo': (context) => KnowDeviceInfo(),
-        '/InputSalary': (context) => InputSalary(title: 'SourceOfEverything :P'),
+        '/InputSalary': (context) =>
+            InputSalary(title: 'SourceOfEverything :P'),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 // 共通
-Widget LinkContainer(BuildContext context, String pagename) {
+Widget LinkContainer(BuildContext context, String pagename, String pageurl) {
   // Color randomColor = getRandomColor();
   return GestureDetector(
     child: Container(
@@ -39,7 +40,7 @@ Widget LinkContainer(BuildContext context, String pagename) {
       width: 200,
       height: 100,
       child: Center(
-        child: Text(pagename),
+        child: Text(pageurl),
       ),
     ),
     onTap: () {
@@ -67,13 +68,14 @@ class PagesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('各式各樣畫面的入口'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text('第一個畫面'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LinkContainer(context, 'KnowDeviceInfo'),
-            LinkContainer(context, 'InputSalary'),
+            LinkContainer(context, 'KnowDeviceInfo', '裝置的邊界資訊'),
+            LinkContainer(context, 'InputSalary', '計算薪資'),
           ],
         ),
       ),
@@ -186,94 +188,96 @@ class _InputSalaryState extends State<InputSalary> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          Container(
-            child: TextField(
-              controller: _dateController,
-              decoration: InputDecoration(
-                labelText: 'Date',
-                filled: true,
-                prefixIcon: Icon(Icons.calendar_today),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              child: TextField(
+                controller: _dateController,
+                decoration: InputDecoration(
+                  labelText: 'Date',
+                  filled: true,
+                  prefixIcon: Icon(Icons.calendar_today),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
+                readOnly: true,
+                onTap: () {
+                  _selectDate();
+                },
               ),
-              readOnly: true,
-              onTap: () {
-                _selectDate();
-              },
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('應發金額'),
-                    CustomInputField(
-                        labelText: '本薪',
-                        controller: _basicSalaryController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '午餐費',
-                        controller: _lunchController,
-                        keyboardType: TextInputType.number),
-                    CustomInputField(
-                        labelText: '加班費',
-                        controller: _overtimeController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '持股信託',
-                        controller: _trustBonusController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '新制雇主提繳',
-                        controller: _newEmployerController,
-                        keyboardType: TextInputType.number),
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('應發金額'),
+                      CustomInputField(
+                          labelText: '本薪',
+                          controller: _basicSalaryController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '午餐費',
+                          controller: _lunchController,
+                          keyboardType: TextInputType.number),
+                      CustomInputField(
+                          labelText: '加班費',
+                          controller: _overtimeController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '持股信託',
+                          controller: _trustBonusController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '新制雇主提繳',
+                          controller: _newEmployerController,
+                          keyboardType: TextInputType.number),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('應扣金額'),
-                    CustomInputField(
-                        labelText: '健保費本人自付',
-                        controller: _healthInsuranceController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '勞保費自付',
-                        controller: _laborInsuranceController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '職工福利費',
-                        controller: _employeeBenefitsController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '產業工會會費',
-                        controller: _industryUnionFeeController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '補充健保費',
-                        controller: _supplementaryInsuranceController,
-                        keyboardType: TextInputType.number),
-                    CustomInputFieldHint(
-                        labelText: '員工持股信託自提金',
-                        controller: _employeeStockSelfController,
-                        keyboardType: TextInputType.number),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('應扣金額'),
+                      CustomInputField(
+                          labelText: '健保費本人自付',
+                          controller: _healthInsuranceController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '勞保費自付',
+                          controller: _laborInsuranceController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '職工福利費',
+                          controller: _employeeBenefitsController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '產業工會會費',
+                          controller: _industryUnionFeeController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '補充健保費',
+                          controller: _supplementaryInsuranceController,
+                          keyboardType: TextInputType.number),
+                      CustomInputFieldHint(
+                          labelText: '員工持股信託自提金',
+                          controller: _employeeStockSelfController,
+                          keyboardType: TextInputType.number),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
