@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'BaseUI/RandomFunction.dart';
-
+import 'Data2DB.dart';
+import 'dart:developer' as developer;
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => PagesButton(),
         '/KnowDeviceInfo': (context) => KnowDeviceInfo(),
-        '/InputSalary': (context) => InputSalary(title: 'SourceOfEverything :P'),
+        '/InputSalary': (context) =>
+            InputSalary(title: 'SourceOfEverything :P'),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -266,7 +268,14 @@ class _InputSalaryState extends State<InputSalary> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          try {
+            sendDataToPhp();
+          } catch (e) {
+            print(e);
+            developer.log('捕獲到異常: $e', name: 'main');
+          }
+        },
         tooltip: '新增',
         child: const Icon(Icons.add),
       ),

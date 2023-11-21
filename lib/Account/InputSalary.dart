@@ -14,15 +14,15 @@ class _InputSalaryState extends State<InputSalary> {
   late TextEditingController _basicSalaryController; //基本薪資
   late TextEditingController _lunchController; //午餐費
   late TextEditingController _overtimeController; //加班費
-  late TextEditingController _trustBonusController; //信託
+  late TextEditingController _trustBonusController; //員工持股信託獎勵金
   late TextEditingController _dateController; //日期
-  late TextEditingController _newEmployerController; //新制
-  late TextEditingController _healthInsuranceController;
-  late TextEditingController _laborInsuranceController;
-  late TextEditingController _employeeBenefitsController;
-  late TextEditingController _industryUnionFeeController;
-  late TextEditingController _supplementaryInsuranceController;
-  late TextEditingController _employeeStockSelfController;
+  late TextEditingController _newEmployerController; //新制雇主提繳
+  late TextEditingController _healthInsuranceController; //健保費本人自付
+  late TextEditingController _laborInsuranceController; //勞保費自付
+  late TextEditingController _employeeBenefitsController; //職工福利費
+  late TextEditingController _industryUnionFeeController; //產業工會會費
+  late TextEditingController _supplementaryInsuranceController; //補充健保費
+  late TextEditingController _employeeStockSelfController; //員工持股信託自提金
 
   @override
   void initState() {
