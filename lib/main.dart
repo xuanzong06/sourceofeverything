@@ -15,10 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home': (context) => PagesButton(),
-        '/KnowDeviceInfo': (context) => KnowDeviceInfo(),
-        '/InputSalary': (context) =>
-            InputSalary(title: 'SourceOfEverything :P'),
+        '/home': (context) => const PagesButton(),
+        '/KnowDeviceInfo': (context) => const KnowDeviceInfo(),
+        '/InputSalary': (context) => const InputSalary(title: 'SourceOfEverything :P'),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 // 共通
-Widget LinkContainer(BuildContext context, String pagename) {
+Widget linkContainer(BuildContext context, String pagename) {
   // Color randomColor = getRandomColor();
   return GestureDetector(
     child: Container(
@@ -47,7 +46,9 @@ Widget LinkContainer(BuildContext context, String pagename) {
     onTap: () {
       //如果要使用我這種方式去建立Widget，會需要先建立Route
       // MaterialPageRoute(builder: (context) => const PageURL()),
-      Navigator.pushNamed(context, '/' + pagename);
+      // Navigator.pushNamed(context, '/' + pagename);
+      Navigator.pushNamed(context, '/$pagename');
+
     },
   );
 }
@@ -59,13 +60,13 @@ class PagesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('各式各樣畫面的入口'),
+        title: const Text('各式各樣畫面的入口'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LinkContainer(context, 'KnowDeviceInfo'),
-            LinkContainer(context, 'InputSalary'),
+            linkContainer(context, 'KnowDeviceInfo'),
+            linkContainer(context, 'InputSalary'),
           ],
         ),
       ),
@@ -84,8 +85,8 @@ class KnowDeviceInfo extends StatefulWidget {
 class _KnowDeviceInfoState extends State<KnowDeviceInfo> {
   @override
   Widget build(BuildContext context) {
-    final double DeviceScreenWidth = MediaQuery.of(context).size.width;
-    final double DeviceSrceenHeight = MediaQuery.of(context).size.height;
+    final double deviceScreenWidth = MediaQuery.of(context).size.width;
+    final double deviceSrceenHeight = MediaQuery.of(context).size.height;
     return Center(
       child: Container(
         color: Colors.greenAccent,
@@ -94,12 +95,12 @@ class _KnowDeviceInfoState extends State<KnowDeviceInfo> {
         child: Column(
           children: [
             Text(
-              '這個裝置的Width:$DeviceScreenWidth',
-              style: TextStyle(color: Colors.black),
+              '這個裝置的Width:$deviceScreenWidth',
+              style: const TextStyle(color: Colors.black),
             ),
             Text(
-              '這個裝置的Width:$DeviceSrceenHeight',
-              style: TextStyle(color: Colors.black),
+              '這個裝置的Width:$deviceSrceenHeight',
+              style: const TextStyle(color: Colors.black),
             ),
             FloatingActionButton(
               onPressed: () {
@@ -158,17 +159,17 @@ class _InputSalaryState extends State<InputSalary> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _selectDate() async {
-      DateTime? _picked = await showDatePicker(
+    Future<void> selectDate() async {
+      DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100),
       );
 
-      if (_picked != null) {
+      if (picked != null) {
         setState(() {
-          _dateController.text = _picked.toString().split(" ")[0];
+          _dateController.text = picked.toString().split(" ")[0];
         });
       }
     }
@@ -180,25 +181,23 @@ class _InputSalaryState extends State<InputSalary> {
       ),
       body: Column(
         children: [
-          Container(
-            child: TextField(
-              controller: _dateController,
-              decoration: InputDecoration(
-                labelText: 'Date',
-                filled: true,
-                prefixIcon: Icon(Icons.calendar_today),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
+          TextField(
+            controller: _dateController,
+            decoration: const InputDecoration(
+              labelText: 'Date',
+              filled: true,
+              prefixIcon: Icon(Icons.calendar_today),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
               ),
-              readOnly: true,
-              onTap: () {
-                _selectDate();
-              },
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
             ),
+            readOnly: true,
+            onTap: () {
+              selectDate();
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -207,7 +206,7 @@ class _InputSalaryState extends State<InputSalary> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('應發金額'),
+                    const Text('應發金額'),
                     CustomInputField(
                         labelText: '本薪',
                         controller: _basicSalaryController,
@@ -235,7 +234,7 @@ class _InputSalaryState extends State<InputSalary> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('應扣金額'),
+                    const Text('應扣金額'),
                     CustomInputField(
                         labelText: '健保費本人自付',
                         controller: _healthInsuranceController,
@@ -289,6 +288,7 @@ class CustomInputField extends StatelessWidget {
   final TextInputType keyboardType;
 
   const CustomInputField({
+    
     required this.labelText,
     required this.controller,
     required this.keyboardType,
@@ -306,7 +306,7 @@ class CustomInputField extends StatelessWidget {
           child: TextField(
             controller: controller,
             keyboardType: keyboardType,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               // labelText: labelText,
             ),
